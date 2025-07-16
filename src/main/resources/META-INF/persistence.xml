@@ -4,15 +4,39 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   
     <persistence-unit name="pu" transaction-type="RESOURCE_LOCAL">
-        <!--<class>Employee</class>--> <!-- this can be ignored as automatic classpath scannig is done by Hibernate -->
+        <description>Primary persistence unit for Oracle DB (local XE)</description> <!-- description is optional -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> <!-- even though JPA provider is auto detected still explicitly writing -->
+        <!--<class>Employee</class>--> <!-- this can be ignored as automatic classpath scanning is done by Hibernate -->
 
         <properties>
+            <!-- JDBC connection Properties -->
             <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
             <property name="javax.persistence.jdbc.user" value="DB1"/>
             <property name="javax.persistence.jdbc.password" value="admin"/>
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+
+            <!-- Hibernate settings which if not added won't create problem -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+
+            <!-- Optional too -->
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="3000"/>
+
+            <!-- for bean validation we can use below. not using in project hence commenting out-->
+            <!-- <property name="javax.persistence.validation.mode" value="AUTO"/> -->
+
+            <!-- Second-level cache (optional). see documentation -->
+            <!-- <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.jcache.JCacheRegionFactory"/>
+            <property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider"/>-->
         </properties>
-        
     </persistence-unit>
   
 </persistence>
